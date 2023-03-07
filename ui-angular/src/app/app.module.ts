@@ -3,10 +3,11 @@ import { BrowserModule } from '@angular/platform-browser'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
+import { LeafletModule } from '@asymmetrik/ngx-leaflet'
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [BrowserModule, AppRoutingModule],
+    imports: [BrowserModule, AppRoutingModule, LeafletModule],
     providers: [],
     bootstrap: [AppComponent],
 })
