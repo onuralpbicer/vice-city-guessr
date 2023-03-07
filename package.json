@@ -1,0 +1,19 @@
+{
+  "name": "vice-city-guessr",
+  "version": "0.0.1",
+  "description": "A GeoGuessr type game for GTA Vice City",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/onuralpbicer/vice-city-guessr.git"
+  },
+  "author": "Onur Alp Bicer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/onuralpbicer/vice-city-guessr/issues"
+  },
+  "homepage": "https://github.com/onuralpbicer/vice-city-guessr#readme"
+}
