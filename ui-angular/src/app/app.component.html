@@ -1,1 +1,7 @@
-<div style="height: 1000px" leaflet [leafletOptions]="options"></div>
+<div
+    style="height: 1000px; background-color: #99d0f7"
+    leaflet
+    [leafletOptions]="options"
+    (leafletMapReady)="onMapReady($event)"
+    (leafletClick)="clicked($event)"
+></div>
