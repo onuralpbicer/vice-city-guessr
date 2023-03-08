@@ -68,7 +68,7 @@ async function initializeLocations(count = 5): Promise<GameLocation[]> {
 async function initialiseGame(): Promise<Game> {
     return {
         locations: await initializeLocations(),
-        maxScorePerRound: 5,
+        maxScorePerRound: 500,
     }
 }
 
