@@ -28,6 +28,10 @@ interface Game {
     maxScorePerRound: number
 }
 
+interface GamePayload extends Pick<Game, 'maxScorePerRound'> {
+    locations: GameLocation['id'][]
+}
+
 const ongoingGames: {
     [key: string]: Game
 } = {}
@@ -76,6 +80,13 @@ async function initialiseGame(): Promise<Game> {
     }
 }
 
+function getUIPayloadOfGame(game: Game): GamePayload {
+    return {
+        maxScorePerRound: game.maxScorePerRound,
+        locations: game.locations.map((location) => location.id),
+    }
+}
+
 io.on(ClientMessages.Connected, (socket) => {
     socket.on(ClientMessages.Disconnect, () => {
         delete ongoingGames[socket.id]
@@ -84,8 +95,6 @@ io.on(ClientMessages.Connected, (socket) => {
     initialiseGame().then((game) => {
         ongoingGames[socket.id] = game
 
-        console.log(game)
-
-        socket.emit(ServerMessages.StartedGame, game)
+        socket.emit(ServerMessages.StartedGame, getUIPayloadOfGame(game))
     })
 })
