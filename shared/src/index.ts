@@ -1,4 +1,7 @@
-export enum ClientMessages {}
+export enum ClientMessages {
+    Connected = 'connection',
+    Disconnect = 'disconnect',
+}
 // PlayerInfo = 'PlayerInfo',
 // JoinGame = 'JoinGame',
 
