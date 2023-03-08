@@ -3,7 +3,8 @@
     "version": "0.0.1",
     "description": "A GeoGuessr type game for GTA Vice City",
     "scripts": {
-        "start-ng": "npm run start -w ui-angular"
+        "start-ng": "npm run start -w ui-angular",
+        "start-backend": "npm run start -w backend"
     },
     "repository": {
         "type": "git",
@@ -16,6 +17,8 @@
     },
     "homepage": "https://github.com/onuralpbicer/vice-city-guessr#readme",
     "workspaces": [
-        "ui-angular"
+        "ui-angular",
+        "backend",
+        "shared"
     ]
 }
