@@ -1,6 +1,12 @@
 import { Server, Socket } from 'socket.io'
 import { DefaultEventsMap } from 'socket.io/dist/typed-events'
-import { ClientMessages, ServerMessages } from 'shared'
+import {
+    ClientMessages,
+    Game,
+    GameLocation,
+    GamePayload,
+    ServerMessages,
+} from 'shared'
 import { v4 as uuid } from 'uuid'
 import { promises as fs } from 'fs'
 import path from 'path'
@@ -11,26 +17,6 @@ const io = new Server(3000, {
         methods: '*',
     },
 })
-
-interface LatLng {
-    lat: number
-    lng: number
-}
-
-interface GameLocation {
-    id: string
-    actualLatLng: LatLng
-    score?: number
-}
-
-interface Game {
-    locations: GameLocation[]
-    maxScorePerRound: number
-}
-
-interface GamePayload extends Pick<Game, 'maxScorePerRound'> {
-    locations: GameLocation['id'][]
-}
 
 const ongoingGames: {
     [key: string]: Game

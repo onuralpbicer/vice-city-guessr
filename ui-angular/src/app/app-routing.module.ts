@@ -15,6 +15,13 @@ const routes: Routes = [
             ),
     },
     {
+        path: 'location',
+        loadChildren: () =>
+            import('./location-page/location-page.module').then(
+                (m) => m.LocationPageModule,
+            ),
+    },
+    {
         path: '**',
         redirectTo: 'map',
     },
