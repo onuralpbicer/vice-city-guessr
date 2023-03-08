@@ -1,0 +1,1 @@
+7 map px = 9 meters
