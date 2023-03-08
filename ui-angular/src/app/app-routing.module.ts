@@ -8,6 +8,13 @@ const routes: Routes = [
             import('./map-page/map-page.module').then((m) => m.MapPageModule),
     },
     {
+        path: '',
+        loadChildren: () =>
+            import('./main-page/main-page.module').then(
+                (m) => m.MainPageModule,
+            ),
+    },
+    {
         path: '**',
         redirectTo: 'map',
     },
