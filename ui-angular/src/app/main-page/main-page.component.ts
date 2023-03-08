@@ -1,16 +1,26 @@
-import { Component } from '@angular/core'
-import { Socket } from 'ngx-socket-io'
-import { ClientMessages } from 'shared/src'
+import { Component, OnInit } from '@angular/core'
+import { GameService } from '../game/game.service'
+import { Observable } from 'rxjs'
 
 @Component({
     selector: 'app-main-page',
     templateUrl: './main-page.component.html',
     styleUrls: ['./main-page.component.scss'],
 })
-export class MainPageComponent {
-    constructor(private socketIO: Socket) {}
+export class MainPageComponent implements OnInit {
+    public startingGame = false
+
+    constructor(private gameService: GameService) {}
+
+    ngOnInit(): void {
+        this.gameService.resetGame()
+    }
 
     public startGame() {
-        this.socketIO.emit(ClientMessages.StartGame)
+        this.startingGame = true
+
+        this.gameService.startGame(() => {
+            this.startingGame = false
+        })
     }
 }

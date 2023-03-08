@@ -1,8 +1,10 @@
-export enum ClientMessages {
-    // PlayerInfo = 'PlayerInfo',
-    // JoinGame = 'JoinGame',
-    StartGame = 'StartGame',
-}
+export enum ClientMessages {}
+// PlayerInfo = 'PlayerInfo',
+// JoinGame = 'JoinGame',
 
-export enum ServerMessages {}
-// JoinedGame = 'JoinedGame',
+export enum ServerMessages {
+    // Connect = 'connect',
+    Disconnect = 'disconnect',
+    ConnectError = 'connect_error',
+    StartedGame = 'StartedGame',
+}

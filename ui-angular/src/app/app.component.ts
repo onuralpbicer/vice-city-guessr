@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { IdService } from './id/id.service'
+import { GameService } from './game/game.service'
+import { Observable } from 'rxjs'
 
 @Component({
     selector: 'app-root',
@@ -7,7 +9,10 @@ import { IdService } from './id/id.service'
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-    constructor(private idService: IdService) {}
+    constructor(
+        private idService: IdService,
+        private gameService: GameService,
+    ) {}
 
     ngOnInit(): void {
         this.idService.createUserIDIfNotExists()
