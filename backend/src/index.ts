@@ -3,6 +3,7 @@ import { DefaultEventsMap } from 'socket.io/dist/typed-events'
 import { ClientMessages, ServerMessages } from 'shared'
 import { v4 as uuid } from 'uuid'
 import { promises as fs } from 'fs'
+import path from 'path'
 
 const io = new Server(3000, {
     cors: {
@@ -31,17 +32,20 @@ const ongoingGames: {
     [key: string]: Game
 } = {}
 
+const locationsDir = '../locations'
+const coordsDir = path.join(locationsDir, 'coords')
+
 function getRandomIndex(length: number) {
     return Math.floor(Math.random() * length)
 }
 
 async function initializeLocations(count = 5): Promise<GameLocation[]> {
-    const allLocations = await fs.readdir('../locations/coords')
+    const allLocations = await fs.readdir(coordsDir)
 
     const availableLocations: GameLocation[] = await Promise.all(
         allLocations.map(async (id) => {
             const latlngStr = (
-                await fs.readFile(`../locations/coords/${id}`)
+                await fs.readFile(path.join(coordsDir, id))
             ).toString()
             const [lat, lng] = latlngStr.split('-').map((i) => Number(i))
             return { id, actualLatLng: { lat, lng } }
