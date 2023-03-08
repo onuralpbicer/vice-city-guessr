@@ -13,6 +13,7 @@ import {
     imageOverlay,
     latLng,
     LatLngBoundsExpression,
+    LeafletMouseEvent,
 } from 'leaflet'
 
 @Component({
@@ -56,8 +57,8 @@ export class MapPageComponent implements AfterViewInit, OnDestroy {
         this.map.setZoom(0.5)
     }
 
-    public clicked(event: any) {
-        console.log(event)
+    public clicked(event: LeafletMouseEvent) {
+        console.log(event.latlng)
     }
 
     constructor(private cdr: ChangeDetectorRef) {}
