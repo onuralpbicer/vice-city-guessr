@@ -1,0 +1,11 @@
+<div #container class="map-container">
+    <div
+        *ngIf="height > 0"
+        [style.height.px]="height"
+        class="map"
+        leaflet
+        [leafletOptions]="options"
+        (leafletMapReady)="onMapReady($event)"
+        (leafletClick)="clicked($event)"
+    ></div>
+</div>
