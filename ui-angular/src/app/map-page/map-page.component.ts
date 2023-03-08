@@ -53,6 +53,7 @@ export class MapPageComponent implements AfterViewInit, OnDestroy {
         this.map = map
 
         this.map.fitBounds(this.bounds)
+        this.map.setZoom(0.5)
     }
 
     public clicked(event: any) {
