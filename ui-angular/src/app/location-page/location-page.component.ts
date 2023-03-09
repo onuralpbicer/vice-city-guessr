@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Observable, filter, map } from 'rxjs'
 import { GameService } from '../game/game.service'
 import { ILocation } from 'shared'
+
+function isNil(input: any) {
+    return input === undefined || input === null
+}
 
 @Component({
     selector: 'app-location-page',
@@ -16,6 +20,7 @@ export class LocationPageComponent implements OnInit {
     constructor(
         private activatedRoute: ActivatedRoute,
         private gameService: GameService,
+        private router: Router,
     ) {}
 
     ngOnInit(): void {
@@ -26,7 +31,12 @@ export class LocationPageComponent implements OnInit {
                 map((id) => Number(id)),
             )
             .subscribe((step) => {
-                this.currentStep = this.gameService.getGameStep(step)
+                const currentStep = this.gameService.getGameStep(step)
+                if (isNil(currentStep)) {
+                    this.router.navigateByUrl('/')
+                    return
+                }
+                this.currentStep = currentStep
                 this.index = step
             })
     }
