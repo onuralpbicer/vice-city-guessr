@@ -1,12 +1,14 @@
 export enum ClientMessages {
     Connected = 'connection',
     Disconnect = 'disconnect',
+    MakeGuess = 'MakeGuess',
 }
 
 export enum ServerMessages {
     Disconnect = 'disconnect',
     ConnectError = 'connect_error',
     StartedGame = 'StartedGame',
+    GuessResult = 'GuessResult',
 }
 
 export interface LatLng {

@@ -5,6 +5,7 @@ import {
     Game,
     GameLocation,
     GamePayload,
+    LatLng,
     ServerMessages,
 } from 'shared'
 import { v4 as uuid } from 'uuid'
@@ -78,6 +79,33 @@ async function initialiseGame(): Promise<Game> {
     }
 }
 
+function distanceInPixels(x1: LatLng, x2: LatLng) {
+    return Math.abs(
+        Math.sqrt(Math.pow(x1.lat - x2.lat, 2) + Math.pow(x1.lng - x2.lng, 2)),
+    )
+}
+
+function generateScore(distanceInPixels: number, maxScorePerRound: number) {
+    return Math.max(maxScorePerRound - distanceInPixels, 0)
+}
+
+function setupGame(socket: Socket, game: Game) {
+    console.log(ClientMessages.MakeGuess)
+    socket.on(ClientMessages.MakeGuess, (step: number, guess: LatLng) => {
+        const actualLocation = game.locations[step]
+        console.log(actualLocation)
+
+        const distance = distanceInPixels(actualLocation.actualLatLng, guess)
+
+        actualLocation.score = generateScore(distance, game.maxScorePerRound)
+        socket.emit(
+            ServerMessages.GuessResult,
+            actualLocation.score,
+            actualLocation.actualLatLng,
+        )
+    })
+}
+
 function getUIPayloadOfGame(game: Game): GamePayload {
     return {
         maxScorePerRound: game.maxScorePerRound,
@@ -93,6 +121,7 @@ io.on(ClientMessages.Connected, (socket) => {
     initialiseGame().then((game) => {
         ongoingGames[socket.id] = game
 
+        setupGame(socket, game)
         socket.emit(ServerMessages.StartedGame, getUIPayloadOfGame(game))
     })
 })
