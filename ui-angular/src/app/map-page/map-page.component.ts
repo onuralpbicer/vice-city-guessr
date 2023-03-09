@@ -16,6 +16,7 @@ import {
     LatLngBoundsExpression,
     LeafletMouseEvent,
     Marker,
+    control,
 } from 'leaflet'
 import { LatLng } from 'shared'
 
@@ -51,6 +52,7 @@ export class MapPageComponent implements AfterViewInit, OnDestroy {
         maxZoom: 5,
         maxBoundsViscosity: 0.8,
         maxBounds: this.bounds,
+        zoomControl: false,
     }
 
     public map!: LMap
@@ -62,6 +64,7 @@ export class MapPageComponent implements AfterViewInit, OnDestroy {
 
         this.map.fitBounds(this.bounds)
         this.map.setZoom(0.5)
+        control.zoom({ position: 'bottomright' }).addTo(this.map)
     }
 
     public clicked(event: LeafletMouseEvent) {
