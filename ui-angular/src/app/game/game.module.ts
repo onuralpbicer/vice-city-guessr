@@ -7,6 +7,7 @@ const socketIOConfig: SocketIoConfig = {
     url: 'http://localhost:3000',
     options: {
         autoConnect: false,
+        transports: ['websocket'],
     },
 }
 

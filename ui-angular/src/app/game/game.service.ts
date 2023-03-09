@@ -1,12 +1,19 @@
 import { Injectable, OnInit, OnDestroy } from '@angular/core'
-import { ServerMessages, GamePayload, GameLocation, ILocation } from 'shared'
+import {
+    ServerMessages,
+    GamePayload,
+    GameLocation,
+    ILocation,
+    LatLng,
+    ClientMessages,
+} from 'shared'
 import { Socket } from 'ngx-socket-io'
 import { Observable, Subject, Subscription, filter, map, take } from 'rxjs'
 import { ActivatedRoute, Router } from '@angular/router'
 
 @Injectable()
 export class GameService implements OnDestroy {
-    public connected$: Subject<boolean> = new Subject()
+    public connected = false
 
     public locations: ILocation[] = []
 
@@ -32,26 +39,41 @@ export class GameService implements OnDestroy {
         return this.locations[step]
     }
 
+    public listenForGuessResult(onResult: (location: ILocation) => void) {
+        this.socketIO.on(
+            ServerMessages.GuessResult,
+            (step: number, score: number, actualPos: LatLng) => {
+                const location = this.locations[step]
+
+                location.score = score
+                location.actualLatLng = actualPos
+                onResult(location)
+            },
+        )
+    }
+
+    public makeGuess(step: number, location: LatLng) {
+        this.socketIO.emit(ClientMessages.MakeGuess, step, location)
+    }
+
     public setupConnectedObservable() {
         this.socketIO.on(ServerMessages.StartedGame, () => {
-            this.connected$.next(true)
+            this.connected = true
         })
 
         this.socketIO.on(ServerMessages.Disconnect, () => {
-            this.connected$.next(false)
+            this.connected = false
         })
 
         this.socketIO.on(ServerMessages.ConnectError, () => {
-            this.connected$.next(false)
+            this.connected = false
         })
     }
 
     public resetGame() {
-        this.connected$.pipe(take(1)).subscribe((connected) => {
-            if (connected) {
-                this.socketIO.disconnect()
-            }
-        })
+        if (this.connected) {
+            this.socketIO.disconnect()
+        }
     }
 
     public startGame(onSettled: () => void) {
@@ -65,7 +87,7 @@ export class GameService implements OnDestroy {
 
             // redirect to the first location page
             onSettled()
-            this.connected$.next(true)
+            this.connected = true
             this.router.navigate(['location', 0])
         })
         this.socketIO.once(ServerMessages.Disconnect, onSettled)

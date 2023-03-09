@@ -1,7 +1,15 @@
 <div class="container">
     <img [src]="imageSrc" width="100%" />
 
-    <button [disabled]="!guess">
+    <button
+        [disabled]="!guess || score !== undefined"
+        (click)="makeGuess.emit()"
+    >
         Make guess {{ guess?.lat }} - {{ guess?.lng }}
     </button>
+
+    <ng-container *ngIf="score !== undefined">
+        Score is {{ score }}
+        <button (click)="goNext.emit()">{{ nextLinkText }}</button>
+    </ng-container>
 </div>

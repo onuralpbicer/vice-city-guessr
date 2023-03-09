@@ -5,8 +5,10 @@ import {
     ElementRef,
     EventEmitter,
     Input,
+    OnChanges,
     OnDestroy,
     Output,
+    SimpleChanges,
     ViewChild,
 } from '@angular/core'
 import {
@@ -27,7 +29,7 @@ import { LatLng } from 'shared'
     templateUrl: './map-page.component.html',
     styleUrls: ['./map-page.component.scss'],
 })
-export class MapPageComponent implements AfterViewInit, OnDestroy {
+export class MapPageComponent implements AfterViewInit, OnDestroy, OnChanges {
     @Input() public actualLatLng: LatLng | undefined = undefined
     @Output() public makeGuess = new EventEmitter<LatLng>()
 
@@ -40,6 +42,29 @@ export class MapPageComponent implements AfterViewInit, OnDestroy {
         [0, 0],
         [1000, 1000],
     ]
+
+    ngOnChanges(changes: SimpleChanges): void {
+        const actualLatLngChanges = changes['actualLatLng']
+
+        if (!actualLatLngChanges.currentValue) {
+            this.guessMarker?.removeFrom(this.map)
+        }
+
+        if (actualLatLngChanges.currentValue) {
+            if (this.actualMarker) {
+                this.actualMarker.setLatLng(actualLatLngChanges.currentValue)
+            } else {
+                this.actualMarker = new Marker(
+                    actualLatLngChanges.currentValue,
+                    {
+                        opacity: 0.5,
+                    },
+                ).addTo(this.map)
+            }
+        } else {
+            this.actualMarker?.removeFrom(this.map)
+        }
+    }
 
     public options: MapOptions = {
         layers: [
@@ -60,10 +85,12 @@ export class MapPageComponent implements AfterViewInit, OnDestroy {
 
     public map!: LMap
     public guessMarker: Marker | null = null
+    public actualMarker: Marker | null = null
 
     public onMapReady(map: LMap) {
         this.map = map
         this.guessMarker = null
+        this.actualMarker = null
 
         this.map.fitBounds(this.bounds)
         this.map.setZoom(0.5)
@@ -74,7 +101,6 @@ export class MapPageComponent implements AfterViewInit, OnDestroy {
         if (this.actualLatLng) {
             return
         }
-        console.log(event.latlng)
 
         this.makeGuess.emit(event.latlng)
         if (this.guessMarker) {

@@ -29,6 +29,24 @@ export class LocationPageComponent implements OnInit {
         this.guess = guess
     }
 
+    submitGuess() {
+        if (!this.guess) return
+
+        this.gameService.listenForGuessResult((location) => {
+            this.currentStep = location
+            this.guess = null
+        })
+        this.gameService.makeGuess(this.index, this.guess)
+    }
+
+    nextStep() {
+        if (this.index === this.gameService.locations.length - 1) {
+            this.router.navigateByUrl('/')
+        } else {
+            this.router.navigate(['location', this.index + 1])
+        }
+    }
+
     ngOnInit(): void {
         this.activatedRoute.params
             .pipe(

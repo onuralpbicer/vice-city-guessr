@@ -93,13 +93,21 @@ function setupGame(socket: Socket, game: Game) {
     console.log(ClientMessages.MakeGuess)
     socket.on(ClientMessages.MakeGuess, (step: number, guess: LatLng) => {
         const actualLocation = game.locations[step]
-        console.log(actualLocation)
 
-        const distance = distanceInPixels(actualLocation.actualLatLng, guess)
+        if (actualLocation.score === undefined) {
+            const distance = distanceInPixels(
+                actualLocation.actualLatLng,
+                guess,
+            )
 
-        actualLocation.score = generateScore(distance, game.maxScorePerRound)
+            actualLocation.score = generateScore(
+                distance,
+                game.maxScorePerRound,
+            )
+        }
         socket.emit(
             ServerMessages.GuessResult,
+            step,
             actualLocation.score,
             actualLocation.actualLatLng,
         )
