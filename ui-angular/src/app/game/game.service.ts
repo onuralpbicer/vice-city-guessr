@@ -1,23 +1,35 @@
 import { Injectable, OnInit, OnDestroy } from '@angular/core'
-import { ServerMessages, GamePayload, GameLocation } from 'shared'
+import { ServerMessages, GamePayload, GameLocation, ILocation } from 'shared'
 import { Socket } from 'ngx-socket-io'
-import { Observable, Subject, Subscription, take } from 'rxjs'
-import { Router } from '@angular/router'
+import { Observable, Subject, Subscription, filter, map, take } from 'rxjs'
+import { ActivatedRoute, Router } from '@angular/router'
 
 @Injectable()
 export class GameService implements OnDestroy {
     public connected$: Subject<boolean> = new Subject()
 
-    public locations!: Omit<GameLocation, 'actualLatLng'>[]
+    public locations: ILocation[] = []
 
     public maxScorePerRound!: number
 
-    constructor(private socketIO: Socket, private router: Router) {
+    constructor(
+        private socketIO: Socket,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+    ) {
         // console.log(ClientMessages.StartGame)
     }
 
     ngOnDestroy(): void {
         this.socketIO.removeAllListeners()
+    }
+
+    public getGameStep(step: number): ILocation | null {
+        if (step < 0 || step > this.locations.length) {
+            return null
+        }
+
+        return this.locations[step]
     }
 
     public setupConnectedObservable() {

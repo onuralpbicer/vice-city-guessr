@@ -4,7 +4,7 @@ import { LocationPageComponent } from './location-page.component'
 
 const routes: Routes = [
     {
-        path: ':id',
+        path: ':step',
         component: LocationPageComponent,
     },
     {

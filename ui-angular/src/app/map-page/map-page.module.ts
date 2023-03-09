@@ -7,5 +7,6 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet'
 @NgModule({
     declarations: [MapPageComponent],
     imports: [CommonModule, MapPageRoutingModule, LeafletModule],
+    exports: [MapPageComponent],
 })
 export class MapPageModule {}
