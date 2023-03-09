@@ -29,4 +29,5 @@ export interface GamePayload extends Pick<Game, 'maxScorePerRound'> {
     locations: GameLocation['id'][]
 }
 
-export type ILocation = Omit<GameLocation, 'actualLatLng'>
+export type ILocation = Omit<GameLocation, 'actualLatLng'> &
+    Partial<Pick<GameLocation, 'actualLatLng'>>
