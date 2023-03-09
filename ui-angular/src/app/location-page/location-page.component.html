@@ -1,3 +1,4 @@
 <ng-container *ngIf="currentStep as step">
-    <app-map-page [actualLatLng]="currentStep.actualLatLng"></app-map-page>
+    <app-map-page [actualLatLng]="currentStep.actualLatLng" (makeGuess)="guessAttempt($event)"></app-map-page>
+    <app-location-modal [id]="currentStep.id" [guess]="guess"/>
 </ng-container>

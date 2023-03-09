@@ -3,8 +3,10 @@ import {
     ChangeDetectorRef,
     Component,
     ElementRef,
+    EventEmitter,
     Input,
     OnDestroy,
+    Output,
     ViewChild,
 } from '@angular/core'
 import {
@@ -27,6 +29,7 @@ import { LatLng } from 'shared'
 })
 export class MapPageComponent implements AfterViewInit, OnDestroy {
     @Input() public actualLatLng: LatLng | undefined = undefined
+    @Output() public makeGuess = new EventEmitter<LatLng>()
 
     @ViewChild('container') containerRef!: ElementRef<HTMLDivElement>
     public resizeObserver!: ResizeObserver
@@ -73,6 +76,7 @@ export class MapPageComponent implements AfterViewInit, OnDestroy {
         }
         console.log(event.latlng)
 
+        this.makeGuess.emit(event.latlng)
         if (this.guessMarker) {
             this.guessMarker.setLatLng(event.latlng)
         } else {
