@@ -10,8 +10,23 @@ import {
 import { v4 as uuid } from 'uuid'
 import { promises as fs } from 'fs'
 import path from 'path'
+import express from 'express'
+import http from 'http'
 
-const io = new Server(3000, {
+const locationsDir = '../locations'
+const coordsDir = path.join(locationsDir, 'coords')
+const imagesDir = path.join(locationsDir, 'images')
+
+const app = express()
+const server = http.createServer(app)
+
+app.use('/assets', express.static(imagesDir))
+
+server.listen(3000, () => {
+    console.log('server listening on 3000')
+})
+
+const io = new Server(server, {
     cors: {
         origin: '*',
         methods: '*',
@@ -21,9 +36,6 @@ const io = new Server(3000, {
 const ongoingGames: {
     [key: string]: Game
 } = {}
-
-const locationsDir = '../locations'
-const coordsDir = path.join(locationsDir, 'coords')
 
 function getRandomIndex(length: number) {
     return Math.floor(Math.random() * length)
